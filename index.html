@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAMhub - RGB Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        /* Animated RGB Background */
+        .bg-layer-1 {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom right, rgba(220, 38, 38, 0.2), rgba(147, 51, 234, 0.2), rgba(37, 99, 235, 0.2));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .bg-layer-2 {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top left, rgba(34, 197, 94, 0.1), rgba(234, 179, 8, 0.1), rgba(236, 72, 153, 0.1));
+            animation: pulse 2s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        /* Floating RGB Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .orb-1 {
+            top: 25%;
+            left: 25%;
+            width: 128px;
+            height: 128px;
+            background-color: rgba(239, 68, 68, 0.3);
+            animation: bounce 2s infinite;
+            animation-delay: 0.3s;
+        }
+
+        .orb-2 {
+            top: 75%;
+            right: 25%;
+            width: 96px;
+            height: 96px;
+            background-color: rgba(59, 130, 246, 0.3);
+            animation: bounce 2s infinite;
+            animation-delay: 0.7s;
+        }
+
+        .orb-3 {
+            bottom: 25%;
+            left: 33%;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(34, 197, 94, 0.3);
+            animation: bounce 2s infinite;
+            animation-delay: 1s;
+        }
+
+        .orb-4 {
+            top: 50%;
+            right: 33%;
+            width: 112px;
+            height: 112px;
+            background-color: rgba(168, 85, 247, 0.3);
+            animation: bounce 2s infinite;
+            animation-delay: 0.5s;
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .title-section {
+            margin-bottom: 2rem;
+        }
+
+        .main-title {
+            font-size: 6rem;
+            background: linear-gradient(to right, #ef4444, #a855f7, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 1s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .main-title.hovered {
+            background: linear-gradient(to right, #f87171, #fbbf24, #4ade80, #60a5fa, #a78bfa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .button-section {
+            padding-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .start-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to right, #ef4444, #a855f7, #3b82f6);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(to right, #dc2626, #9333ea, #2563eb);
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px -12px rgba(168, 85, 247, 0.25);
+        }
+
+        .button-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, #facc15, #f472b6, #06b6d4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .start-button:hover .button-overlay {
+            opacity: 0.2;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* RGB Dots */
+        .rgb-dots {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        .dot-red {
+            background-color: #ef4444;
+        }
+
+        .dot-green {
+            background-color: #22c55e;
+            animation-delay: 0.3s;
+        }
+
+        .dot-blue {
+            background-color: #3b82f6;
+            animation-delay: 0.7s;
+        }
+
+        /* Bottom RGB Line */
+        .bottom-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6, #a855f7);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 4rem;
+            }
+            
+            .subtitle {
+                font-size: 1.25rem;
+                padding: 0 1rem;
+            }
+            
+            .start-button {
+                padding: 1.25rem 2.5rem;
+                font-size: 1.125rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .start-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-title {
+                font-size: 9rem;
+            }
+            
+            .subtitle {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Animated RGB Background -->
+        <div class="bg-layer-1"></div>
+        <div class="bg-layer-2"></div>
+        
+        <!-- Floating RGB Orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="title-section">
+                <!-- Title -->
+                <h1 id="mainTitle" class="main-title">JAMhub</h1>
+                <p class="subtitle">Games/utils hub for andss student</p>
+            </div>
+
+            <!-- Start Button -->
+            <div class="button-section">
+                <button id="startButton" class="start-button">
+                    <span class="button-text">start now</span>
+                    <div class="button-overlay"></div>
+                </button>
+            </div>
+
+            <!-- Additional RGB Effects -->
+            <div class="rgb-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-green"></div>
+                <div class="dot dot-blue"></div>
+            </div>
+        </div>
+
+        <!-- Bottom RGB Line -->
+        <div class="bottom-line"></div>
+    </div>
+
+    <script>
+        // Title hover effect
+        const mainTitle = document.getElementById('mainTitle');
+        
+        mainTitle.addEventListener('mouseenter', function() {
+            this.classList.add('hovered');
+        });
+        
+        mainTitle.addEventListener('mouseleave', function() {
+            this.classList.remove('hovered');
+        });
+
+        // Start button click event
+        const startButton = document.getElementById('startButton');
+        
+        startButton.addEventListener('click', function() {
+            console.log('JAMhub started!');
+            // Add your start logic here
+            alert('Welcome to JAMhub!');
+            window.location.href = 'https://uno-multiplayer-pccb.onrender.com';
+        });
+
+        // Add some extra interactivity - clicking on orbs
+        const orbs = document.querySelectorAll('.orb');
+        orbs.forEach(orb => {
+            orb.addEventListener('click', function() {
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
